@@ -1,0 +1,4 @@
+name: CheeseMaking
+version: '${project.version}'
+main: me.schmeb.cheesemaking.CheeseMaking
+api-version: 1.19
