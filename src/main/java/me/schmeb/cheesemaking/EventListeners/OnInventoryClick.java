@@ -28,7 +28,7 @@ public class OnInventoryClick implements Listener {
 
         if(isCheeseBarrel.containsCheeseBarrelKeyword(barrel))
         {
-            // Checks if there is at least one item in the cheese barrel
+            // Checks if there is at least one item in the barrel
             if(Arrays.stream(event.getInventory().getContents()).anyMatch(Objects::nonNull)){
                 event.setCancelled(true);
             }
