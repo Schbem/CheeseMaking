@@ -1,14 +1,12 @@
 package me.schmeb.cheesemaking.EventListeners;
 
+import me.schmeb.cheesemaking.CheeseBarrelFunctions.ChangeBarrelStatus;
 import me.schmeb.cheesemaking.CheeseBarrelFunctions.CheeseTableMesophilic;
 import me.schmeb.cheesemaking.CheeseMaking;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Barrel;
 import org.bukkit.block.TileState;
-import org.bukkit.entity.ArmorStand;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -39,15 +37,12 @@ public class OnCurdlePlace implements Listener {
                 TileState barrelTileState = (TileState) barrel.getBlock().getState();
 
                 if(barrelTileState.getPersistentDataContainer().has(cheeseBarrelKey)){
-                    barrel.getBlock().getLocation().toCenterLocation().getNearbyEntitiesByType(ArmorStand.class, 0.2, 0.2, 0.2).forEach(
-                            entity -> entity.customName(Component.text("FERMENTING...", NamedTextColor.YELLOW)));
-
+                    ChangeBarrelStatus.changeToFermenting(barrel);
                     new BukkitRunnable() {
                         @Override
                         public void run() {
                             if(Arrays.stream(event.getInventory().getStorageContents()).filter(Objects::nonNull).anyMatch(item -> item.getType() == Material.SUSPICIOUS_STEW)){
-                                barrel.getBlock().getLocation().toCenterLocation().getNearbyEntitiesByType(ArmorStand.class, 0.2, 0.2, 0.2).forEach(
-                                        entity -> entity.customName(Component.text("DONE", NamedTextColor.GREEN)));
+                                ChangeBarrelStatus.changeToDone(barrel);
                                 event.getInventory().clear();
                                 event.getInventory().setItem(0, table.getCheeseMesophilic());
                                 event.getInventory().setItem(1, new ItemStack(Material.BOWL));
@@ -62,8 +57,7 @@ public class OnCurdlePlace implements Listener {
                 TileState barrelTileState = (TileState) barrel.getBlock().getState();
 
                 if(barrelTileState.getPersistentDataContainer().has(cheeseBarrelKey)){
-                    barrel.getBlock().getLocation().toCenterLocation().getNearbyEntitiesByType(ArmorStand.class, 0.2, 0.2, 0.2).forEach(
-                            entity -> entity.customName(Component.text("IDLE", NamedTextColor.RED)));
+                    ChangeBarrelStatus.changeToIdle(barrel);
                 }
             }
         }

@@ -16,6 +16,8 @@ public final class CheeseMaking extends JavaPlugin {
     private final NamespacedKey cheeseBarrelKey = new NamespacedKey(this, "cheese_barrel");
     private final NamespacedKey mesophilicCheeseCurdles = new NamespacedKey(this, "mesophilic_cheese_curdles");
     private final NamespacedKey mesophilicBacteria = new NamespacedKey(this, "mesophilic_bacteria");
+    private final NamespacedKey normalCheese = new NamespacedKey(this, "normal_cheese");
+    private final NamespacedKey greatCheese = new NamespacedKey(this, "great_cheese");
 
     @Override
     public void onEnable() {
@@ -34,7 +36,9 @@ public final class CheeseMaking extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new OnInventoryClick(isCheeseBarrel), this);
         getServer().getPluginManager().registerEvents(new HopperPlaceCancel(), this);
         getServer().getPluginManager().registerEvents(new OnIngredientsCompile(curdleCreate, mesophilicBacteria), this);
-        getServer().getPluginManager().registerEvents(new OnMyceliumBreak(bacteriaCreate), this);
+        getServer().getPluginManager().registerEvents(new onMyceliumBreak(bacteriaCreate), this);
+        getServer().getPluginManager().registerEvents(new OnBeetrootHarvest(bacteriaCreate), this);
+        getServer().getPluginManager().registerEvents(new OnCheeseConsume(normalCheese, greatCheese), this);
     }
     @Override
     public void onDisable() {

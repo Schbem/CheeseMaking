@@ -15,9 +15,10 @@ public class OnCheeseBarrelBreak implements Listener {
 
         if(block.getType() == Material.BARREL)
         {
-            block.getLocation().toCenterLocation().getNearbyEntitiesByType(ArmorStand.class, 0.2, 0.2, 0.2).forEach(entity -> {
-                entity.remove();
-                event.getPlayer().getWorld().dropItem(entity.getLocation(), new ItemStack(Material.GOLDEN_SHOVEL));
+            block.getLocation().toCenterLocation().getNearbyEntitiesByType(ArmorStand.class, 0.2, 0.2, 0.2)
+                    .forEach(entity -> {
+                        entity.remove();
+                        event.getPlayer().getWorld().dropItem(entity.getLocation(), new ItemStack(Material.GOLDEN_SHOVEL));
             });
         }
     }

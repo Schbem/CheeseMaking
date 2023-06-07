@@ -5,7 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
+import static org.bukkit.persistence.PersistentDataType.STRING;
 
 public class BacteriaCreate {
     private final NamespacedKey mesophilicBacteria;
@@ -21,7 +21,7 @@ public class BacteriaCreate {
         itemMeta.displayName(LegacyComponentSerializer.legacyAmpersand().deserialize("&d&lMesophilic Bacteria"));
         itemMeta.getPersistentDataContainer().set(
                 mesophilicBacteria,
-                PersistentDataType.STRING,
+                STRING,
                 "MESOPHILIC"
         );
         bacteria.setItemMeta(itemMeta);
