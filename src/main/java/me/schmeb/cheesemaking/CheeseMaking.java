@@ -4,11 +4,10 @@ import me.schmeb.cheesemaking.BacteriaFunctions.BacteriaCreate;
 import me.schmeb.cheesemaking.BacteriaFunctions.CurdleCreate;
 import me.schmeb.cheesemaking.CheeseBarrelFunctions.CheeseTableMesophilic;
 import me.schmeb.cheesemaking.CheeseBarrelFunctions.CreateCheeseBarrel;
-import me.schmeb.cheesemaking.EventChecker.CheckIfAnyEntityCollides;
-import me.schmeb.cheesemaking.EventChecker.CheckLocationOfShovel;
-import me.schmeb.cheesemaking.EventChecker.IsCheeseBarrel;
+import me.schmeb.cheesemaking.EventChecker.EventChecker;
 import me.schmeb.cheesemaking.EventListeners.*;
 import org.bukkit.NamespacedKey;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class CheeseMaking extends JavaPlugin {
@@ -22,30 +21,34 @@ public final class CheeseMaking extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-        CheckIfAnyEntityCollides checkIfAnyEntityCollides = new CheckIfAnyEntityCollides();
-        CheckLocationOfShovel checker = new CheckLocationOfShovel();
-        CreateCheeseBarrel barrelCreator = new CreateCheeseBarrel(checkIfAnyEntityCollides);
-        IsCheeseBarrel isCheeseBarrel = new IsCheeseBarrel(cheeseBarrelKey);
-        CheeseTableMesophilic table = new CheeseTableMesophilic();
-        CurdleCreate curdleCreate = new CurdleCreate(mesophilicCheeseCurdles, mesophilicBacteria);
-        BacteriaCreate bacteriaCreate = new BacteriaCreate(mesophilicBacteria);
-
-        getServer().getPluginManager().registerEvents(new ShovelDropListener(checker, barrelCreator), this);
-        getServer().getPluginManager().registerEvents(new OnCheeseBarrelBreak(), this);
-        getServer().getPluginManager().registerEvents(new OnCurdlePlace(table, mesophilicCheeseCurdles, cheeseBarrelKey), this);
-        getServer().getPluginManager().registerEvents(new OnInventoryClick(isCheeseBarrel), this);
-        getServer().getPluginManager().registerEvents(new HopperPlaceCancel(), this);
-        getServer().getPluginManager().registerEvents(new OnIngredientsCompile(curdleCreate, mesophilicBacteria), this);
-        getServer().getPluginManager().registerEvents(new onMyceliumBreak(bacteriaCreate), this);
-        getServer().getPluginManager().registerEvents(new OnBeetrootHarvest(bacteriaCreate), this);
-        getServer().getPluginManager().registerEvents(new OnCheeseConsume(normalCheese, greatCheese), this);
+        registerListeners();
     }
     @Override
     public void onDisable() {
         instance = null;
     }
 
-    public static CheeseMaking getInstance(){
+    private void registerListeners() {
+        EventChecker eventChecker = new EventChecker(cheeseBarrelKey);
+        CreateCheeseBarrel barrelCreator = new CreateCheeseBarrel(eventChecker, cheeseBarrelKey);
+        CheeseTableMesophilic table = new CheeseTableMesophilic();
+        CurdleCreate curdleCreate = new CurdleCreate(mesophilicCheeseCurdles, mesophilicBacteria);
+        BacteriaCreate bacteriaCreate = new BacteriaCreate(mesophilicBacteria);
+
+        PluginManager pluginManager = getServer().getPluginManager();
+
+        pluginManager.registerEvents(new ShovelDropListener(eventChecker, barrelCreator), this);
+        pluginManager.registerEvents(new OnCheeseBarrelBreak(), this);
+        pluginManager.registerEvents(new OnCurdlePlace(table, mesophilicCheeseCurdles, cheeseBarrelKey), this);
+        pluginManager.registerEvents(new OnInventoryClick(eventChecker), this);
+        pluginManager.registerEvents(new HopperPlaceCancel(), this);
+        pluginManager.registerEvents(new OnIngredientsCompile(curdleCreate, mesophilicBacteria), this);
+        pluginManager.registerEvents(new onMyceliumBreak(bacteriaCreate), this);
+        pluginManager.registerEvents(new OnBeetrootHarvest(bacteriaCreate), this);
+        pluginManager.registerEvents(new OnCheeseConsume(normalCheese, greatCheese), this);
+    }
+
+    public static CheeseMaking getInstance() {
         return instance;
     }
 }

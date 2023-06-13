@@ -10,11 +10,10 @@ import org.bukkit.inventory.ItemStack;
 
 public class OnCheeseBarrelBreak implements Listener {
     @EventHandler
-    public void onBarrelDestroy(BlockBreakEvent event){
+    public void onBarrelDestroy(BlockBreakEvent event) {
         Block block = event.getBlock();
 
-        if(block.getType() == Material.BARREL)
-        {
+        if(block.getType() == Material.BARREL) {
             block.getLocation().toCenterLocation().getNearbyEntitiesByType(ArmorStand.class, 0.2, 0.2, 0.2)
                     .forEach(entity -> {
                         entity.remove();

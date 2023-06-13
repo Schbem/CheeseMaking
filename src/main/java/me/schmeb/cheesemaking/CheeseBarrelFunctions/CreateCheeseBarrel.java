@@ -2,8 +2,7 @@ package me.schmeb.cheesemaking.CheeseBarrelFunctions;
 
 import io.github.bananapuncher714.nbteditor.NBTEditor;
 import io.papermc.paper.math.Rotations;
-import me.schmeb.cheesemaking.CheeseMaking;
-import me.schmeb.cheesemaking.EventChecker.CheckIfAnyEntityCollides;
+import me.schmeb.cheesemaking.EventChecker.EventChecker;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Location;
@@ -21,13 +20,15 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
 public class CreateCheeseBarrel {
-    CheckIfAnyEntityCollides checkIfAnyEntityCollides;
+    EventChecker eventChecker;
+    private final NamespacedKey cheeseBarrelKey;
 
-    public CreateCheeseBarrel(CheckIfAnyEntityCollides checkIfAnyEntityCollides){
-        this.checkIfAnyEntityCollides = checkIfAnyEntityCollides;
+    public CreateCheeseBarrel(EventChecker eventChecker, NamespacedKey cheeseBarrelKey) {
+        this.eventChecker = eventChecker;
+        this.cheeseBarrelKey = cheeseBarrelKey;
     }
-    public void createBarrel(Block barrel, Player player, Item item){
-        if(!checkIfAnyEntityCollides.isClear(barrel)){
+    public void createBarrel(Block barrel, Player player, Item item) {
+        if(!eventChecker.isClear(barrel)) {
             player.sendMessage("Make sure the top of the barrel is clear or is not already a cheese barrel!");
             return;
         }
@@ -37,15 +38,14 @@ public class CreateCheeseBarrel {
 
         TileState tileState = (TileState) barrel.getState();
         tileState.getPersistentDataContainer().set(
-                new NamespacedKey(CheeseMaking.getInstance(), "cheese_barrel"),
+                cheeseBarrelKey,
                 PersistentDataType.STRING,
                 "PLACEHOLDER"
         );
         tileState.update();
 
         ItemStack skullItem = NBTEditor.getHead(
-                "http://textures.minecraft.net/texture/68c57baeae2534a67ff7368905998ff6ce373ee6130ca20b63261b0f769e12ec"
-        );
+                "http://textures.minecraft.net/texture/68c57baeae2534a67ff7368905998ff6ce373ee6130ca20b63261b0f769e12ec");
 
         Location location = item.getLocation().toCenterLocation();
         location.setY(item.getLocation().getBlockY() - 0.9);

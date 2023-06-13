@@ -10,23 +10,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RottenCheese{
-    List<Component> lore;
-    ItemStack item;
+    List<Component> lore = new ArrayList<>();
+    ItemStack item = new ItemStack(Material.ROTTEN_FLESH);
 
-    public RottenCheese(){
-        item = new ItemStack(Material.ROTTEN_FLESH);
-
+    public RottenCheese() {
         ItemMeta itemMeta = item.getItemMeta();
         itemMeta.displayName(LegacyComponentSerializer.legacyAmpersand().deserialize("&6&lStrange Cheese"));
 
-        lore = new ArrayList<>();
         lore.add(0, LegacyComponentSerializer.legacyAmpersand().deserialize("&eDefinitely safe to eat"));
         itemMeta.lore(lore);
 
         item.setItemMeta(itemMeta);
     }
 
-    public ItemStack getItem() {
+    public ItemStack getItem(){
         return item;
     }
 }

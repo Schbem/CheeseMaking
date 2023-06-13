@@ -2,7 +2,7 @@ package me.schmeb.cheesemaking.EventListeners;
 
 import me.schmeb.cheesemaking.CheeseBarrelFunctions.CreateCheeseBarrel;
 import me.schmeb.cheesemaking.CheeseMaking;
-import me.schmeb.cheesemaking.EventChecker.CheckLocationOfShovel;
+import me.schmeb.cheesemaking.EventChecker.EventChecker;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Item;
@@ -12,20 +12,20 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class ShovelDropListener implements Listener {
-    CheckLocationOfShovel checker;
+    EventChecker eventChecker;
     CreateCheeseBarrel barrelCreator;
-    public ShovelDropListener(CheckLocationOfShovel checker, CreateCheeseBarrel barrelCreator){
-        this.checker = checker;
+    public ShovelDropListener(EventChecker eventChecker, CreateCheeseBarrel barrelCreator){
+        this.eventChecker = eventChecker;
         this.barrelCreator = barrelCreator;
     }
     @EventHandler
     public void onItemDrop(PlayerDropItemEvent event){
         Item item = event.getItemDrop();
         if(item.getItemStack().getType() != Material.GOLDEN_SHOVEL) return;
-        new BukkitRunnable(){
+        new BukkitRunnable() {
             @Override
             public void run() {
-                if(checker.checkIfLocationIsValid(item))
+                if(eventChecker.checkIfLocationIsValid(item))
                 {
                     barrelCreator.createBarrel(item.getLocation().getBlock().getRelative(BlockFace.DOWN), event.getPlayer(), item);
                 }

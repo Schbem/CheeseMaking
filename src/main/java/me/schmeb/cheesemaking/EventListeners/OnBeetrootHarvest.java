@@ -12,20 +12,19 @@ import org.bukkit.inventory.ItemStack;
 public class OnBeetrootHarvest implements Listener {
     private final BacteriaCreate bacteriaCreate;
 
-    public OnBeetrootHarvest(BacteriaCreate bacteriaCreate){
+    public OnBeetrootHarvest(BacteriaCreate bacteriaCreate) {
         this.bacteriaCreate = bacteriaCreate;
     }
     @EventHandler
-    public void onHarvest(BlockBreakEvent event){
-        ItemStack getBowl = event.getPlayer().getInventory().getItemInMainHand();
+    public void onHarvest(BlockBreakEvent event) {
+        ItemStack isHoldingBowl = event.getPlayer().getInventory().getItemInMainHand();
 
-        if(event.getBlock().getType() == Material.BEETROOTS && getBowl.getType() == Material.BOWL)
-        {
+        if(event.getBlock().getType() == Material.BEETROOTS && isHoldingBowl.getType() == Material.BOWL) {
             Ageable ageable = (Ageable) event.getBlock().getBlockData();
             if(ageable.getAge() != ageable.getMaximumAge()) return;
 
             Block block = event.getBlock();
-            block.getWorld().dropItem(block.getLocation(), bacteriaCreate.returnMesophilicBacteria());
+            bacteriaCreate.returnMesophilicBacteria(block.getLocation());
         }
     }
 }

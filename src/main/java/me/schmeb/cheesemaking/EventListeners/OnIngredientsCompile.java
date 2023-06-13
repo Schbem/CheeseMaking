@@ -1,5 +1,6 @@
 package me.schmeb.cheesemaking.EventListeners;
 
+import io.github.bananapuncher714.nbteditor.NBTEditor;
 import me.schmeb.cheesemaking.BacteriaFunctions.CurdleCreate;
 import me.schmeb.cheesemaking.CheeseMaking;
 import org.bukkit.Material;
@@ -24,13 +25,12 @@ public class OnIngredientsCompile implements Listener {
     public void onIngredientsMix(PlayerDropItemEvent event){
         if(event.getItemDrop().getItemStack().getType() == Material.MILK_BUCKET ||
                 event.getItemDrop().getItemStack().getType() == Material.BOWL ||
-                event.getItemDrop().getItemStack().getItemMeta().getPersistentDataContainer().has(mesophilicBacteria))
-        {
-            new BukkitRunnable(){
+                event.getItemDrop().getItemStack().getItemMeta().getPersistentDataContainer().has(mesophilicBacteria)) {
+            new BukkitRunnable() {
                 @Override
                 public void run() {
                     Block blockUnder = event.getItemDrop().getLocation().getBlock();
-                    if(blockUnder.getType() == Material.CAULDRON && blockUnder.getRelative(BlockFace.DOWN).getType() == Material.CAMPFIRE){
+                    if(blockUnder.getType() == Material.CAULDRON && blockUnder.getRelative(BlockFace.DOWN).getType() == Material.CAMPFIRE) {
                         boolean hasMilk = event.getItemDrop().getLocation().getNearbyEntitiesByType(Item.class, 1, 1, 1).stream()
                                 .anyMatch(entity -> entity.getItemStack().getType() == Material.MILK_BUCKET);
 
@@ -38,9 +38,10 @@ public class OnIngredientsCompile implements Listener {
                                 .anyMatch(entity -> entity.getItemStack().getType() == Material.BOWL);
 
                         boolean hasBacteria = event.getItemDrop().getLocation().getNearbyEntitiesByType(Item.class, 1, 1, 1).stream()
-                                .anyMatch(entity -> entity.getItemStack().getItemMeta().getPersistentDataContainer().has(mesophilicBacteria));
+                                .anyMatch(entity -> entity.getItemStack().getItemMeta().getPersistentDataContainer().has(mesophilicBacteria)
+                                        || NBTEditor.contains(entity.getItemStack(), "bacteria"));
 
-                        if(hasMilk && hasBowl && hasBacteria){
+                        if(hasMilk && hasBowl && hasBacteria) {
                             curdleCreate.createBacteria(event.getPlayer(), event.getItemDrop().getLocation());
                         }
                     }

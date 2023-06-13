@@ -1,5 +1,6 @@
 package me.schmeb.cheesemaking.EventListeners;
 
+import io.github.bananapuncher714.nbteditor.NBTEditor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,13 +24,11 @@ public class OnCheeseConsume implements Listener {
         ItemMeta itemMeta = event.getItem().getItemMeta();
         Player player = event.getPlayer();
 
-        if(itemMeta.getPersistentDataContainer().has(normalCheese))
-        {
+        if(itemMeta.getPersistentDataContainer().has(normalCheese)) {
             player.setFoodLevel(player.getFoodLevel() + 2);
         }
 
-        if(itemMeta.getPersistentDataContainer().has(greatCheese))
-        {
+        if(itemMeta.getPersistentDataContainer().has(greatCheese) || NBTEditor.contains(event.getItem(), "godcheese")) {
             player.setFoodLevel(player.getFoodLevel() + 4);
             player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 20*20, 0));
             player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 120*20, 0));

@@ -14,51 +14,44 @@ import java.util.Random;
 
 public class onMyceliumBreak implements Listener {
     BacteriaCreate bacteriaCreate;
-    public onMyceliumBreak(BacteriaCreate bacteriaCreate){
+    public onMyceliumBreak(BacteriaCreate bacteriaCreate) {
         this.bacteriaCreate = bacteriaCreate;
     }
 
     @EventHandler
     public void onMyceliumBreakEvent(BlockBreakEvent event){
-        if(event.getBlock().getType() == Material.MYCELIUM)
-        {
+        if(event.getBlock().getType() == Material.MYCELIUM) {
             ItemStack item = event.getPlayer().getInventory().getItemInMainHand();
-
             if(item.containsEnchantment(Enchantment.SILK_TOUCH)) return;
 
-            Random random = new Random();
-            double RNG = random.nextDouble();
-            Location blockLocation = event.getBlock().getLocation();
+            if(event.getPlayer().getGameMode() == GameMode.SURVIVAL) {
+                Random random = new Random();
+                double RNG = random.nextDouble();
+                Location blockLocation = event.getBlock().getLocation();
 
-            if(event.getPlayer().getGameMode() == GameMode.SURVIVAL)
-            {
-                if(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS) == 1)
-                {
-                    if(RNG < 0.15)
-                    {
+                switch (item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS)) {
+                    case 1:
+                        if(RNG < 0.15) {
+                            event.setDropItems(false);
+                            bacteriaCreate.returnMesophilicBacteria(blockLocation);
+                        }
+                        break;
+                    case 2:
+                        if(RNG < 0.25) {
+                            event.setDropItems(false);
+                            bacteriaCreate.returnMesophilicBacteria(blockLocation);
+                        }
+                        break;
+                    case 3:
                         event.setDropItems(false);
-                        blockLocation.getWorld().dropItem(blockLocation.toCenterLocation(), bacteriaCreate.returnMesophilicBacteria());
-                    }
-                }
-                else if(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS) == 2)
-                {
-                    if(RNG < 0.25)
-                    {
-                        event.setDropItems(false);
-                        blockLocation.getWorld().dropItem(blockLocation.toCenterLocation(), bacteriaCreate.returnMesophilicBacteria());
-                    }
-                }
-                else if(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS) == 3)
-                {
-                    blockLocation.getWorld().dropItem(blockLocation.toCenterLocation(), bacteriaCreate.returnMesophilicBacteria());
-                }
-                else if(!item.containsEnchantment(Enchantment.LOOT_BONUS_BLOCKS))
-                {
-                    if(RNG < 0.1)
-                    {
-                        event.setDropItems(false);
-                        blockLocation.getWorld().dropItem(blockLocation.toCenterLocation(), bacteriaCreate.returnMesophilicBacteria());
-                    }
+                        bacteriaCreate.returnMesophilicBacteria(blockLocation);
+                        break;
+                    default:
+                        if(RNG < 0.1) {
+                            event.setDropItems(false);
+                            bacteriaCreate.returnMesophilicBacteria(blockLocation);
+                        }
+                        break;
                 }
             }
         }

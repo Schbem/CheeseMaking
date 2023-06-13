@@ -5,20 +5,20 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
-public class CheeseStamp {
-    public static void stampNormal(ItemMeta itemMeta){
-        itemMeta.getPersistentDataContainer().set(
-                new NamespacedKey(CheeseMaking.getInstance(), "normal_cheese"),
-                PersistentDataType.STRING,
-                "DATA"
-        );
-    }
+import java.util.function.Consumer;
 
-    public static void stampGreat(ItemMeta itemMeta){
-        itemMeta.getPersistentDataContainer().set(
-                new NamespacedKey(CheeseMaking.getInstance(), "great_cheese"),
-                PersistentDataType.STRING,
-                "DATA"
-        );
-    }
+public class CheeseStamp {
+    public static Consumer<ItemMeta> stampNormal = meta ->
+            meta.getPersistentDataContainer().set(
+                    new NamespacedKey(CheeseMaking.getInstance(), "normal_cheese"),
+                    PersistentDataType.STRING,
+                    "DATA"
+            );
+
+    public static Consumer<ItemMeta> stampGreat = meta ->
+            meta.getPersistentDataContainer().set(
+                    new NamespacedKey(CheeseMaking.getInstance(), "great_cheese"),
+                    PersistentDataType.STRING,
+                    "DATA"
+            );
 }
